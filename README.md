@@ -1,2 +1,2 @@
 # network-intrusion-detection
-Neural-network-based network intrusion detection
+Use network traffic features to classify whether traffic is benign or malicious, and optionally identify the attack category. Public benchmark datasets like NSL-KDD and CICIDS2017 are widely used for this kind of work. NSL-KDD was created to address some of the major redundancy problems in KDD’99, and CICIDS2017 was built with more modern attack scenarios and extracted flow features.
