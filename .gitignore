@@ -203,4 +203,7 @@ data/KDDTest+.txt
 
 # Generated Artifacts
 results/preprocessor.joblib
+results/mlp_model.pt
+results/learning_curve.png
+results/confusion_matrix.png
 results/metrics.txt
