@@ -200,3 +200,7 @@ __marimo__/
 # Local NSL-KDD data
 data/KDDTrain+.txt
 data/KDDTest+.txt
+
+# Generated Artifacts
+results/preprocessor.joblib
+results/metrics.txt
