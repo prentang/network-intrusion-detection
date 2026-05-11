@@ -196,3 +196,7 @@ __marimo__/
 
 # dist
 .dist
+
+# Local NSL-KDD data
+data/KDDTrain+.txt
+data/KDDTest+.txt
