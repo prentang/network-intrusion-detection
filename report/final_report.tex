@@ -1,0 +1,23 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\title{Neural Network Based Network Intrusion Detection}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Preprocessing}
+
+Before training the neural network, I had to turn the raw NSL-KDD text files into data that a model could actually use. The dataset does not come with column names in the files themselves, so I added the official feature names manually when loading the training and testing data.
+
+I also changed the original attack labels into a simpler binary classification problem. Any record labeled \texttt{normal} was treated as normal traffic and assigned a label of 0. Every other label was treated as malicious traffic and assigned a label of 1. This matches the first goal of the project, which is to decide whether a connection is benign or an intrusion.
+
+The dataset includes both numeric and categorical features, so I handled them separately. The categorical columns, such as \texttt{protocol\_type}, \texttt{service}, and \texttt{flag}, were one-hot encoded so the model could work with them numerically. The remaining numeric columns were standardized so that large-valued features would not dominate smaller-valued ones during training.
+
+Finally, I split the original training data into a training set and a validation set. I used a stratified split so the normal and attack labels stayed balanced across both sets. The separate NSL-KDD test file was kept for final evaluation after training.
+
+\end{document}
