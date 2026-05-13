@@ -207,3 +207,5 @@ results/mlp_model.pt
 results/learning_curve.png
 results/confusion_matrix.png
 results/metrics.txt
+results/autoencoder_model.pt
+results/autoencoder_learning_curve.png
