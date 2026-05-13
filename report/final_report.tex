@@ -20,4 +20,24 @@ The dataset includes both numeric and categorical features, so I handled them se
 
 Finally, I split the original training data into a training set and a validation set. I used a stratified split so the normal and attack labels stayed balanced across both sets. The separate NSL-KDD test file was kept for final evaluation after training.
 
+\section{Baseline MLP Results}
+
+For the supervised baseline, I trained a multi-layer perceptron on the preprocessed NSL-KDD data. The model used the binary labels directly, where normal traffic was labeled as 0 and attack traffic was labeled as 1. On the test set, the MLP reached an accuracy of 0.802, precision of 0.967, recall of 0.674, and F1-score of 0.795.
+
+The model was very precise when it predicted an attack, but it missed a noticeable number of attack records. This can be seen in the confusion matrix, where 4,181 attack examples were classified as normal. In a security setting, this matters because false negatives are usually more serious than false positives.
+
+\section{Autoencoder Results}
+
+I also trained an autoencoder as an anomaly-detection approach. Instead of learning the attack labels directly, the autoencoder was trained to reconstruct normal traffic. The idea is that normal traffic should have lower reconstruction error, while unusual or malicious traffic should have higher reconstruction error.
+
+To convert reconstruction error into a binary prediction, I used the 95th percentile of the normal validation reconstruction errors as the anomaly threshold. This produced a threshold of 0.0231. On the test set, the autoencoder reached an accuracy of 0.833, precision of 0.928, recall of 0.766, and F1-score of 0.839.
+
+Compared with the supervised MLP, the autoencoder had lower precision but better recall and F1-score. This means it caught more attacks overall, although it also produced more false positives. For intrusion detection, that tradeoff can be useful because it may be better to flag more suspicious traffic than to miss attacks entirely.
+
+\section{Model Comparison}
+
+The MLP and autoencoder behaved differently. The MLP was more conservative when predicting attacks, which gave it high precision but lower recall. The autoencoder was more sensitive to suspicious patterns, which improved recall and overall F1-score.
+
+Overall, the autoencoder performed better on this first experiment based on accuracy and F1-score. However, the MLP is still useful because it is directly supervised and easier to interpret as a binary classifier. The comparison shows why both approaches are worth considering for network intrusion detection: supervised learning works well when labeled attack data is available, while anomaly detection can help identify traffic that does not look normal.
+
 \end{document}
