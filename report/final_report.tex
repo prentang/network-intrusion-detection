@@ -10,6 +10,32 @@
 
 \maketitle
 
+\section{Introduction}
+
+Network intrusion detection is an important problem because attacks can show up in many different forms, from basic scanning behavior to more serious attempts to exploit systems. In practice, security teams often use tools that detect known vulnerabilities in packages, containers, or deployed software, but network traffic still needs its own kind of analysis. This project focuses on using neural networks to classify traffic records as either normal or malicious.
+
+The main goal was to build a first working intrusion detection pipeline using the NSL-KDD dataset. I started with a supervised multi-layer perceptron because the data is tabular and already labeled. After that baseline was working, I added an autoencoder model to test an anomaly-detection approach. This made it possible to compare a model that learns directly from labels with a model that learns what normal traffic looks like.
+
+\section{Problem Definition}
+
+The problem is a binary classification task. Given a network traffic record represented by a feature vector $x \in \mathbb{R}^d$, the model should predict whether the record is normal or malicious. The target label is 0 for normal traffic and 1 for attack traffic.
+
+For the supervised model, the neural network outputs a score that is converted into an intrusion prediction. During training, the model learns to reduce binary cross-entropy loss so that its predictions match the true labels as closely as possible. The main evaluation goal is not only overall accuracy, but also precision, recall, F1-score, and the confusion matrix, since false negatives are especially important in intrusion detection.
+
+\section{Dataset}
+
+The dataset used in this project is NSL-KDD. It is a public benchmark dataset for intrusion detection and is commonly used as a cleaner alternative to the older KDD'99 dataset. NSL-KDD reduces some of the duplicate-record problems found in KDD'99, which makes it more useful for comparing detection models.
+
+The dataset provides separate training and testing files. Each row represents a network connection record with traffic-related features, such as protocol type, service, flag, byte counts, error rates, and host-based statistics. The original labels include normal traffic and multiple attack categories. For this project, I converted those labels into a binary task: normal versus attack.
+
+\section{Related Work}
+
+Tavallaee et al. analyzed problems in the original KDD Cup 99 dataset and helped motivate improved benchmark datasets such as NSL-KDD. Their work is relevant here because it explains why duplicate records and biased data splits can affect intrusion detection experiments.
+
+Autoencoder-based intrusion detection has also been explored in prior work. Gharib et al. proposed AutoIDS, an autoencoder-based approach for detecting intrusions through reconstruction error. Song et al. studied different autoencoder architectures for network intrusion detection, which supports the idea of comparing supervised neural classification with anomaly detection.
+
+More recent datasets, such as CICIDS2017 from Sharafaldin, Lashkari, and Ghorbani, were created to represent modern network traffic and attack behavior more realistically. Although this project uses NSL-KDD for the first implementation, CICIDS2017 would be a useful future dataset for testing whether the models generalize to newer traffic patterns.
+
 \section{Preprocessing}
 
 Before training the neural network, I had to turn the raw NSL-KDD text files into data that a model could actually use. The dataset does not come with column names in the files themselves, so I added the official feature names manually when loading the training and testing data.
@@ -39,5 +65,13 @@ Compared with the supervised MLP, the autoencoder had lower precision but better
 The MLP and autoencoder behaved differently. The MLP was more conservative when predicting attacks, which gave it high precision but lower recall. The autoencoder was more sensitive to suspicious patterns, which improved recall and overall F1-score.
 
 Overall, the autoencoder performed better on this first experiment based on accuracy and F1-score. However, the MLP is still useful because it is directly supervised and easier to interpret as a binary classifier. The comparison shows why both approaches are worth considering for network intrusion detection: supervised learning works well when labeled attack data is available, while anomaly detection can help identify traffic that does not look normal.
+
+\section{Conclusion}
+
+This project built a first working neural-network-based intrusion detection pipeline using the NSL-KDD dataset. The full process included downloading the data, defining the missing column names, preprocessing the traffic records, training a supervised MLP, evaluating the model, and then adding an autoencoder for anomaly detection.
+
+The supervised MLP gave strong precision, which means that when it predicted an attack, it was usually correct. However, its lower recall showed that it missed a meaningful number of attack records. The autoencoder performed better overall in this experiment, especially in recall and F1-score, because it was more willing to flag unusual traffic as suspicious. That came with more false positives, but for intrusion detection this can still be a reasonable tradeoff because missed attacks can be more costly than extra alerts.
+
+Overall, the results show that neural networks can learn useful patterns from benchmark intrusion data, even with a relatively simple architecture. The MLP works well as a supervised baseline, while the autoencoder gives a useful comparison point for anomaly-based detection. A natural next step would be to test both models on a more modern dataset such as CICIDS2017, tune the autoencoder threshold more carefully, and explore whether different architectures improve the balance between precision and recall.
 
 \end{document}
