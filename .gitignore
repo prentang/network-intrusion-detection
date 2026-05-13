@@ -209,3 +209,5 @@ results/confusion_matrix.png
 results/metrics.txt
 results/autoencoder_model.pt
 results/autoencoder_learning_curve.png
+results/autoencoder_metrics.txt
+results/autoencoder_confusion_matrix.png
